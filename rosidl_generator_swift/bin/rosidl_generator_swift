@@ -8,6 +8,7 @@ try:
     from rosidl_generator_swift import generate_swift
 except ImportError:
     # modifying sys.path and importing the Swift package with the same
+
     # name as this script does not work on Windows
     rosidl_generator_swift_root = os.path.dirname(os.path.dirname(__file__))
     rosidl_generator_swift_module = os.path.join(
@@ -18,7 +19,7 @@ except ImportError:
 
     loader = SourceFileLoader('rosidl_generator_swift', rosidl_generator_swift_module)
     rosidl_generator_swift = loader.load_module()
-    generate_swift = rosidl_generator_swift.generate_objc
+    generate_swift = rosidl_generator_swift.generate_swift
 
 
 def main(argv=sys.argv[1:]):
@@ -28,16 +29,12 @@ def main(argv=sys.argv[1:]):
         required=True,
         help='The location of the file containing the generator arguments')
     parser.add_argument(
-        '--typesupport-impl',
-        required=True,
-        help='The typesupport implementation targeted by the C interface')
-    parser.add_argument(
         '--typesupport-impls',
         required=True,
         help='All the available typesupport implementations')
     args = parser.parse_args(argv)
 
-    return generate_objc(args.generator_arguments_file, args.typesupport_impl, args.typesupport_impls)
+    return generate_swift(args.generator_arguments_file, args.typesupport_impls)
 
 
 if __name__ == '__main__':
